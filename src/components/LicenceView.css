@@ -1,0 +1,78 @@
+.licence-view {
+  font-family: "Arial", sans-serif;
+  background-color: #ffffff;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.viewHeader {
+  background-color: white;
+  color: black;
+  width: 100%;
+  text-align: center;
+  padding: 15px;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+/* Haupt-Layout */
+.content {
+  display: flex;
+  justify-content: space-between;
+  width: 80%;
+  margin-top: 20px;
+}
+
+/* Linke Spalte */
+.licence-container {
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+/* Rechte Spalte */
+.sidebar {
+  width: 35%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Boxen der Sidebar */
+.sidebar-box {
+  padding: 20px;
+  border-radius: 10px;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.sidebar-box h2 {
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+
+.sidebar-box p {
+  font-size: 24px;
+}
+
+/* Farben für Sidebar-Boxen */
+
+.sidebar-box.booking {
+  background: #009ba4;
+  color: white;
+}
+
+.sidebar-box.terminate {
+  background: #ff8080;
+  color: white;
+}
+
+.sidebar-box.total {
+  background: #f2f2f2;
+  color: black;
+}

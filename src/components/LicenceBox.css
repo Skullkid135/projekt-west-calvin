@@ -1,0 +1,74 @@
+.licence-box {
+  color: #000000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  padding: 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+  border: 2px solid black;
+}
+
+.licence-box:not(.selected) {
+  background-color: white;
+}
+
+.licence-box.selected {
+  border: 2px solid #00bcc7;
+  background-color: white;
+}
+
+/* Checkbox */
+.checkbox {
+  width: 24px;
+  height: 24px;
+  border: 2px solid #009ba4;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  margin-right: 12px;
+  background: transparent;
+}
+
+.licence-box:not(.selected) .checkbox {
+  border: 2px solid #b0b0b0;
+  color: transparent;
+}
+
+.licence-box.selected .checkbox {
+  background: #009ba4;
+  color: white;
+  border: none;
+}
+
+/* Lizenz-Info Bereich */
+.licence-info {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1; /* Nimmtfreien Platz */
+}
+
+/* Lizenz-Key und Daten */
+.licence-key {
+  font-weight: bold;
+  font-size: 16px;
+  display: inline-block;
+}
+
+/* Buchungs- & Abrechnungsdaten */
+.licence-details {
+  display: flex;
+  flex-direction: column;
+  text-align: right;
+}
+
+/* Ablaufdatum */
+.expiry {
+  color: #ff8080;
+  font-weight: bold;
+}
