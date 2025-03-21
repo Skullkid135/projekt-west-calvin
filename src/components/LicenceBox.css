@@ -5,15 +5,13 @@
   align-items: center;
   background: white;
   padding: 14px;
-  border-radius: 8px;
   cursor: pointer;
   transition: background 0.2s, border-color 0.2s;
-  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
-  border: 2px solid black;
+  border: 2px solid transparent;
 }
 
 .licence-box:not(.selected) {
-  background-color: white;
+  background-color: #f3f3f3;
 }
 
 .licence-box.selected {
@@ -21,7 +19,6 @@
   background-color: white;
 }
 
-/* Checkbox */
 .checkbox {
   width: 24px;
   height: 24px;
@@ -46,28 +43,24 @@
   border: none;
 }
 
-/* Lizenz-Info Bereich */
 .licence-info {
   display: flex;
   flex-direction: column;
-  flex-grow: 1; /* Nimmtfreien Platz */
+  flex-grow: 1; /* Nimmt freien Platz */
 }
 
-/* Lizenz-Key und Daten */
 .licence-key {
   font-weight: bold;
   font-size: 16px;
   display: inline-block;
 }
 
-/* Buchungs- & Abrechnungsdaten */
 .licence-details {
   display: flex;
   flex-direction: column;
   text-align: right;
 }
 
-/* Ablaufdatum */
 .expiry {
   color: #ff8080;
   font-weight: bold;

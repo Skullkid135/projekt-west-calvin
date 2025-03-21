@@ -1,99 +1,16 @@
 import { useState } from "react";
 import LicenceBox from "./LicenceBox";
+import TerminateLicence from "./modal_windows/TerminateLicence";
+import BookingLicence from "./modal_windows/BookingLicence";
 import "./LicenceView.css";
+import { Button } from "@chakra-ui/react";
 
 const LicenceView: React.FC = () => {
   const [selectedLicences, setSelectedLicences] = useState<string[]>([]);
+  const [isTerminateModalOpen, setTerminateModalOpen] = useState(false);
+  const [isBookingModalOpen, setBookingModalOpen] = useState(false);
 
   const licences = [
-    {
-      keyId: "X9L7Q-T5Z2D-Y8M3K",
-      bookingDate: "01.01.2025",
-      nextBillingDate: "31.01.2025",
-    },
-    {
-      keyId: "T2X9K-Y7L5D-Q8V3M",
-      bookingDate: "01.01.2025",
-      nextBillingDate: "31.01.2025",
-      expiryDate: "01.02.2025",
-    },
-    {
-      keyId: "V8T5Q-X7L9D-Y3M2K",
-      bookingDate: "01.01.2025",
-      nextBillingDate: "31.01.2025",
-    },
-    {
-      keyId: "L7X9T-Q2M5D-Y8V3K",
-      bookingDate: "01.01.2025",
-      nextBillingDate: "31.01.2025",
-      expiryDate: "01.02.2025",
-    },
-    {
-      keyId: "X9L7Q-T5Z2D-Y8M3K",
-      bookingDate: "01.01.2025",
-      nextBillingDate: "31.01.2025",
-    },
-    {
-      keyId: "T2X9K-Y7L5D-Q8V3M",
-      bookingDate: "01.01.2025",
-      nextBillingDate: "31.01.2025",
-      expiryDate: "01.02.2025",
-    },
-    {
-      keyId: "V8T5Q-X7L9D-Y3M2K",
-      bookingDate: "01.01.2025",
-      nextBillingDate: "31.01.2025",
-    },
-    {
-      keyId: "L7X9T-Q2M5D-Y8V3K",
-      bookingDate: "01.01.2025",
-      nextBillingDate: "31.01.2025",
-      expiryDate: "01.02.2025",
-    },
-    {
-      keyId: "X9L7Q-T5Z2D-Y8M3K",
-      bookingDate: "01.01.2025",
-      nextBillingDate: "31.01.2025",
-    },
-    {
-      keyId: "T2X9K-Y7L5D-Q8V3M",
-      bookingDate: "01.01.2025",
-      nextBillingDate: "31.01.2025",
-      expiryDate: "01.02.2025",
-    },
-    {
-      keyId: "V8T5Q-X7L9D-Y3M2K",
-      bookingDate: "01.01.2025",
-      nextBillingDate: "31.01.2025",
-    },
-    {
-      keyId: "L7X9T-Q2M5D-Y8V3K",
-      bookingDate: "01.01.2025",
-      nextBillingDate: "31.01.2025",
-      expiryDate: "01.02.2025",
-    },
-    {
-      keyId: "X9L7Q-T5Z2D-Y8M3K",
-      bookingDate: "01.01.2025",
-      nextBillingDate: "31.01.2025",
-    },
-    {
-      keyId: "T2X9K-Y7L5D-Q8V3M",
-      bookingDate: "01.01.2025",
-      nextBillingDate: "31.01.2025",
-      expiryDate: "01.02.2025",
-    },
-    {
-      keyId: "V8T5Q-X7L9D-Y3M2K",
-      bookingDate: "01.01.2025",
-      nextBillingDate: "31.01.2025",
-    },
-    {
-      keyId: "L7X9T-Q2M5D-Y8V3K",
-      bookingDate: "01.01.2025",
-      nextBillingDate: "31.01.2025",
-      expiryDate: "01.02.2025",
-    },
     {
       keyId: "X9L7Q-T5Z2D-Y8M3K",
       bookingDate: "01.01.2025",
@@ -128,7 +45,7 @@ const LicenceView: React.FC = () => {
 
   return (
     <div className="licence-view">
-      <header className="viewHeader">
+      <header className="view-title">
         <h1>Base Planner</h1>
       </header>
 
@@ -148,19 +65,40 @@ const LicenceView: React.FC = () => {
           ))}
         </div>
 
+        {/* Rechte Spalte */}
         <div className="sidebar">
-          <div className="sidebar-box booking">
-            <h2>Neue Lizenzen Buchen</h2>
-          </div>
-          <div className="sidebar-box terminate">
-            <h2>Ausgewählte Lizenzen kündigen</h2>
-          </div>
+          <Button
+            className="sidebar-box booking"
+            variant="solid"
+            onClick={() => setBookingModalOpen(true)}
+          >
+            Neue Lizenzen Buchen
+          </Button>
+
+          <Button
+            className="sidebar-box terminate"
+            variant="solid"
+            onClick={() => setTerminateModalOpen(true)}
+          >
+            Ausgewählte Lizenzen kündigen
+          </Button>
+
           <div className="sidebar-box total">
             <h2>Gesamtkosten für Professional Licences:</h2>
             <p>0,00€ / Monat</p>
           </div>
         </div>
       </div>
+
+      <TerminateLicence
+        isOpen={isTerminateModalOpen}
+        onClose={() => setTerminateModalOpen(false)}
+      />
+
+      <BookingLicence
+        isOpen={isBookingModalOpen}
+        onClose={() => setBookingModalOpen(false)}
+      />
     </div>
   );
 };

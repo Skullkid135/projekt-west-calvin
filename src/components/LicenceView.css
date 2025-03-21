@@ -1,15 +1,16 @@
 .licence-view {
   font-family: "Arial", sans-serif;
-  background-color: #ffffff;
-  min-height: 100vh;
+  background: #ffffff;
+  min-height: 90vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 10px;
+  padding: 20px;
+  color: black;
 }
 
-.viewHeader {
-  background-color: white;
+.view-title {
+  background-color: #f3f3f3;
   color: black;
   width: 100%;
   text-align: center;
@@ -45,7 +46,6 @@
 /* Boxen der Sidebar */
 .sidebar-box {
   padding: 20px;
-  border-radius: 10px;
   font-size: 18px;
   font-weight: bold;
   text-align: center;
@@ -65,14 +65,18 @@
 .sidebar-box.booking {
   background: #009ba4;
   color: white;
+  border-radius: 10px;
+  margin-bottom: 10px;
 }
 
 .sidebar-box.terminate {
   background: #ff8080;
   color: white;
+  border-radius: 10px;
+  margin-bottom: 10px;
 }
 
 .sidebar-box.total {
-  background: #f2f2f2;
+  background: #f3f3f3;
   color: black;
 }
