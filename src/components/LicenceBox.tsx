@@ -32,7 +32,7 @@ const LicenceBox: React.FC<LicenceBoxProps> = ({
           <strong>Buchungsdatum:</strong> {bookingDate}
         </p>
         <p>
-          <strong>Nächstes Abrechungsdatum:</strong> {nextBillingDate}
+          <strong>Nächstes Abrechnungsdatum:</strong> {nextBillingDate}
         </p>
         {expiryDate && (
           <p className="expiry">

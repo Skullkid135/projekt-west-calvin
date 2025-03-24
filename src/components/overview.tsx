@@ -11,7 +11,10 @@ const Overview: React.FC = () => {
         <h1>Lizenz Übersicht</h1>
       </header>
       <div className="license-grid">
-        <div className="license-card" onClick={() => navigate("/licence-view")}>
+        <div
+          className="license-card"
+          onClick={() => navigate("/licence-view/free")}
+        >
           <h3>Free Trial</h3>
           <p>
             Laufende Lizenzen: <strong>7</strong>
@@ -29,7 +32,10 @@ const Overview: React.FC = () => {
           <p className="price">Kostenlos</p>
         </div>
 
-        <div className="license-card" onClick={() => navigate("/licence-view")}>
+        <div
+          className="license-card"
+          onClick={() => navigate("/licence-view/base")}
+        >
           <h3>Base Planner</h3>
           <p>
             Laufende Lizenzen: <strong>5</strong>
@@ -47,7 +53,10 @@ const Overview: React.FC = () => {
           <p className="price">00,00€/Monat</p>
         </div>
 
-        <div className="license-card" onClick={() => navigate("/licence-view")}>
+        <div
+          className="license-card"
+          onClick={() => navigate("/licence-view/professional")}
+        >
           <h3>Professional Planner</h3>
           <p>
             Laufende Lizenzen: <strong>3</strong>

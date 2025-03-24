@@ -4,11 +4,13 @@ import TerminateLicence from "./modal_windows/TerminateLicence";
 import BookingLicence from "./modal_windows/BookingLicence";
 import "./LicenceView.css";
 import { Button } from "@chakra-ui/react";
+import { useParams } from "react-router-dom";
 
 const LicenceView: React.FC = () => {
   const [selectedLicences, setSelectedLicences] = useState<string[]>([]);
   const [isTerminateModalOpen, setTerminateModalOpen] = useState(false);
   const [isBookingModalOpen, setBookingModalOpen] = useState(false);
+  const { type } = useParams();
 
   const licences = [
     {
@@ -46,7 +48,7 @@ const LicenceView: React.FC = () => {
   return (
     <div className="licence-view">
       <header className="view-title">
-        <h1>Base Planner</h1>
+        <h1>{type?.charAt(0).toUpperCase() + type?.slice(1)} Planner</h1>
       </header>
 
       <div className="content">
@@ -84,7 +86,10 @@ const LicenceView: React.FC = () => {
           </Button>
 
           <div className="sidebar-box total">
-            <h2>Gesamtkosten für Professional Licences:</h2>
+            <h2>
+              Gesamtkosten für {type?.charAt(0).toUpperCase() + type?.slice(1)}{" "}
+              Licences:
+            </h2>
             <p>0,00€ / Monat</p>
           </div>
         </div>

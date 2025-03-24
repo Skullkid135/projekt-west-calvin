@@ -12,14 +12,12 @@ function App() {
           <div className="profile-circle">Profile</div>
         </header>
 
-        {/* Routen für die Navigation */}
         <Routes>
           <Route path="/" element={<Overview />} />
-          <Route path="/licence-view" element={<LicenceView />} />
+          <Route path="/licence-view/:type" element={<LicenceView />} />
         </Routes>
       </div>
     </Router>
   );
 }
-
 export default App;
