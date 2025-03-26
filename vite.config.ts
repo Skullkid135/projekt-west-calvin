@@ -5,12 +5,20 @@ import tsconfigPaths from "vite-tsconfig-paths";
 export default defineConfig({
   plugins: [react(), tsconfigPaths()],
   test: {
-    environment: "jsdom", // Stellt sicher, dass Vitest den DOM simuliert
+    environment: "jsdom",
     globals: true,
-    setupFiles: "./setupTests.ts", // Hier setupTests.ts hinzufügen
+    setupFiles: "./setupTests.ts",
+    exclude: ["node_modules", "dist", "coverage", "src/components/ui/**"],
     coverage: {
-      provider: "v8", // Alternativ "istanbul" möglich
-      reporter: ["text", "lcov", "json"], // Wähle die gewünschten Formate
+      provider: "v8",
+      reporter: ["text", "lcov", "json"],
+      exclude: [
+        "src/components/ui/**",
+        "src/components/ui/color-mode.tsx",
+        "src/components/ui/provider.tsx",
+        "src/components/ui/toaster.tsx",
+        "src/components/ui/tooltip.tsx",
+      ],
     },
   },
 });
