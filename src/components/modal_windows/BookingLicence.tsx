@@ -1,6 +1,8 @@
 import "./BookingLicence.css";
 import { Button } from "@chakra-ui/react";
 import { useState } from "react";
+import { bookLicenses } from "../apiServices"; // API Call importieren
+import { useParams } from "react-router-dom";
 
 interface BookingLicenceProps {
   isOpen: boolean;
@@ -13,6 +15,7 @@ export default function BookingLicence({
 }: BookingLicenceProps) {
   const [count, setCount] = useState(1);
   const [isChecked, setIsChecked] = useState(false);
+  const { licenseType } = useParams(); // Holt den Lizenztyp aus der URL
 
   if (!isOpen) return null;
 
@@ -20,11 +23,29 @@ export default function BookingLicence({
   const decrease = () => setCount(count > 1 ? count - 1 : 1);
   const toggleCheckbox = () => setIsChecked(!isChecked);
 
+  const handleBooking = async () => {
+    if (!isChecked) return;
+
+    if (!licenseType) {
+      alert("Lizenztyp ist nicht verfügbar.");
+      return;
+    }
+
+    try {
+      await bookLicenses(licenseType, count);
+      alert(`${count} Lizenzen wurden erfolgreich gebucht!`);
+      onClose();
+    } catch (error) {
+      console.error("Fehler beim Buchen der Lizenzen:", error);
+      alert("Fehler beim Buchen. Bitte erneut versuchen.");
+    }
+  };
+
   return (
     <div className="booking-modal-overlay" onClick={onClose}>
       <div
         className="booking-modal-container"
-        onClick={(e) => e.stopPropagation()}
+        onClick={(e: React.MouseEvent) => e.stopPropagation()}
       >
         <div className="booking-modal-header">
           <p>Bitte Anzahl zu buchender Lizenzen eingeben:</p>
@@ -53,7 +74,7 @@ export default function BookingLicence({
           <Button
             className="confirm-button"
             colorScheme="blue"
-            onClick={onClose}
+            onClick={handleBooking}
             isDisabled={!isChecked}
           >
             Bestätigen

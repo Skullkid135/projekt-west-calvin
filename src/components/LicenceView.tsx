@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import LicenceBox from "./LicenceBox";
 import TerminateLicence from "./modal_windows/TerminateLicence";
 import BookingLicence from "./modal_windows/BookingLicence";
-import "./LicenceView.css";
 import { Button } from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
+import { fetchLicensesByType, terminateLicenses } from "./apiServices";
+import "./LicenceView.css"; // Import der CSS-Datei für LicenceView
 
 const LicenceView: React.FC = () => {
   const [selectedLicences, setSelectedLicences] = useState<string[]>([]);
@@ -12,30 +13,34 @@ const LicenceView: React.FC = () => {
   const [isBookingModalOpen, setBookingModalOpen] = useState(false);
   const { type } = useParams();
 
-  const licences = [
+  const [licences, setLicences] = useState<
     {
-      keyId: "X9L7Q-T5Z2D-Y8M3K",
-      bookingDate: "01.01.2025",
-      nextBillingDate: "31.01.2025",
-    },
-    {
-      keyId: "T2X9K-Y7L5D-Q8V3M",
-      bookingDate: "01.01.2025",
-      nextBillingDate: "31.01.2025",
-      expiryDate: "01.02.2025",
-    },
-    {
-      keyId: "V8T5Q-X7L9D-Y3M2K",
-      bookingDate: "01.01.2025",
-      nextBillingDate: "31.01.2025",
-    },
-    {
-      keyId: "L7X9T-Q2M5D-Y8V3K",
-      bookingDate: "01.01.2025",
-      nextBillingDate: "31.01.2025",
-      expiryDate: "01.02.2025",
-    },
-  ];
+      keyId: string;
+      bookingDate: string;
+      nextBillingDate: string;
+      expiryDate?: string;
+      type: string; // Lizenztyp (free, base, professional)
+    }[]
+  >([]);
+
+  // Preisstruktur für Lizenzen
+  const licensePrices: { [key: string]: number } = {
+    free: 0,
+    base: 10,
+    professional: 20,
+  };
+
+  useEffect(() => {
+    async function loadLicenses() {
+      try {
+        const data = await fetchLicensesByType(type); // Fetch Lizenzen basierend auf dem Typ
+        setLicences(data);
+      } catch (error) {
+        console.error("Fehler beim Laden der Lizenzen:", error);
+      }
+    }
+    loadLicenses();
+  }, [type]);
 
   const toggleSelection = (keyId: string) => {
     setSelectedLicences((prev) =>
@@ -43,6 +48,29 @@ const LicenceView: React.FC = () => {
         ? prev.filter((id) => id !== keyId)
         : [...prev, keyId]
     );
+  };
+
+  const handleTerminateLicenses = async () => {
+    try {
+      const result = await terminateLicenses(selectedLicences);
+      console.log("Lizenzen erfolgreich gekündigt:", result);
+      setLicences((prev) =>
+        prev.filter((licence) => !selectedLicences.includes(licence.keyId))
+      );
+      setSelectedLicences([]); // Auswahl zurücksetzen
+    } catch (error) {
+      console.error("Fehler beim Kündigen der Lizenzen:", error);
+    }
+  };
+
+  // Berechnung der Gesamtkosten für die ausgewählten Lizenzen
+  const calculateTotalCost = () => {
+    return licences
+      .filter((licence) => selectedLicences.includes(licence.keyId))
+      .reduce((total, licence) => {
+        const price = licensePrices[licence.type] || 0;
+        return total + price; // Addiere den Preis zur Gesamtkosten
+      }, 0);
   };
 
   return (
@@ -90,7 +118,7 @@ const LicenceView: React.FC = () => {
               Gesamtkosten für {type?.charAt(0).toUpperCase() + type?.slice(1)}{" "}
               Licences:
             </h2>
-            <p>0,00€ / Monat</p>
+            <p>{calculateTotalCost()} € / Monat</p>
           </div>
         </div>
       </div>

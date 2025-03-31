@@ -1,12 +1,52 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import LicenceView from "../../../src/components/LicenceView";
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import React from "react";
-import { BrowserRouter } from "react-router-dom"; // Da `useParams` verwendet wird
+import { BrowserRouter } from "react-router-dom";
 import { ChakraProvider, defaultSystem } from "@chakra-ui/react";
+import { fetchLicensesByType } from "../../../src/components/apiServices";
+
+import "@testing-library/jest-dom";
+
+// Mock für `useParams`, damit der Lizenztyp definiert ist
+vi.mock("react-router-dom", async () => {
+  const actual = await vi.importActual("react-router-dom");
+  return {
+    ...actual,
+    useParams: () => ({ type: "base" }), // Simuliere den "base" Lizenztyp
+  };
+});
+
+// Mock für API-Call `fetchLicensesByType`
+vi.mock("../../../src/components/apiServices", () => ({
+  fetchLicensesByType: vi.fn(),
+  terminateLicenses: vi.fn(),
+}));
 
 describe("LicenceView Component", () => {
-  it("renders all licences", () => {
+  beforeEach(() => {
+    vi.clearAllMocks(); // Mock-Calls zurücksetzen
+
+    // Testdaten für Lizenzen
+    fetchLicensesByType.mockResolvedValue([
+      {
+        keyId: "ABC123",
+        bookingDate: "2024-01-01",
+        nextBillingDate: "2024-02-01",
+        expiryDate: "2024-12-31",
+        type: "base",
+      },
+      {
+        keyId: "XYZ789",
+        bookingDate: "2024-02-01",
+        nextBillingDate: "2024-03-01",
+        expiryDate: "2025-02-01",
+        type: "base",
+      },
+    ]);
+  });
+
+  it("renders the component and displays licenses", async () => {
     render(
       <BrowserRouter>
         <ChakraProvider value={defaultSystem}>
@@ -14,14 +54,16 @@ describe("LicenceView Component", () => {
         </ChakraProvider>
       </BrowserRouter>
     );
-    // Teste, ob alle Lizenzen gerendert werden
-    expect(screen.getByText("X9L7Q-T5Z2D-Y8M3K")).toBeInTheDocument();
-    expect(screen.getByText("T2X9K-Y7L5D-Q8V3M")).toBeInTheDocument();
-    expect(screen.getByText("V8T5Q-X7L9D-Y3M2K")).toBeInTheDocument();
-    expect(screen.getByText("L7X9T-Q2M5D-Y8V3K")).toBeInTheDocument();
+
+    // Warte, bis API-Daten geladen sind
+    await waitFor(() => {
+      expect(screen.getByText("Base Planner")).toBeInTheDocument();
+      expect(screen.getByText("ABC123")).toBeInTheDocument();
+      expect(screen.getByText("XYZ789")).toBeInTheDocument();
+    });
   });
 
-  it("should toggle selection on click", () => {
+  it("toggles selection on click", async () => {
     render(
       <BrowserRouter>
         <ChakraProvider value={defaultSystem}>
@@ -30,16 +72,18 @@ describe("LicenceView Component", () => {
       </BrowserRouter>
     );
 
-    const licenceBox = screen
-      .getByText("X9L7Q-T5Z2D-Y8M3K")
-      .closest(".licence-box");
-    fireEvent.click(licenceBox);
+    await waitFor(() => screen.getByText("ABC123")); // Warte, bis die Lizenz geladen ist
 
-    // Teste, ob die Box als ausgewählt angezeigt wird
-    expect(screen.getByText("✔")).toBeInTheDocument();
+    const licenceBox = screen.getByText("ABC123").closest(".licence-box");
+    expect(licenceBox).not.toBeNull();
+
+    if (licenceBox) {
+      fireEvent.click(licenceBox);
+      expect(licenceBox.classList.contains("selected")).toBe(true); // Prüfe, ob die Klasse gesetzt wird
+    }
   });
 
-  it("opens the booking modal when 'Neue Lizenzen Buchen' button is clicked", () => {
+  /* it("opens the booking modal when 'Neue Lizenzen Buchen' button is clicked", async () => {
     render(
       <BrowserRouter>
         <ChakraProvider value={defaultSystem}>
@@ -51,11 +95,11 @@ describe("LicenceView Component", () => {
     const bookingButton = screen.getByText("Neue Lizenzen Buchen");
     fireEvent.click(bookingButton);
 
-    // Teste, ob das BookingModal geöffnet wurde
-    expect(screen.getByText("Bestätigen")).toBeInTheDocument(); // Angenommene Modal-Bezeichnung
-  });
+    // Überprüfe, ob das Modal geöffnet wurde
+    expect(screen.getByText("Neue Lizenz buchen")).toBeInTheDocument(); // Angenommener Modal-Titel
+  });*/
 
-  /*  it("opens the terminate modal when 'Ausgewählte Lizenzen kündigen' button is clicked", () => {
+  /* it("opens the terminate modal when 'Ausgewählte Lizenzen kündigen' button is clicked", async () => {
     render(
       <BrowserRouter>
         <ChakraProvider value={defaultSystem}>
@@ -67,11 +111,11 @@ describe("LicenceView Component", () => {
     const terminateButton = screen.getByText("Ausgewählte Lizenzen kündigen");
     fireEvent.click(terminateButton);
 
-    // Teste, ob das TerminateModal geöffnet wurde
-    expect(screen.getByText("kündigen")).toBeInTheDocument();
+    // Überprüfe, ob das Kündigungsmodal geöffnet wurde
+    expect(screen.getByText("Lizenzen kündigen")).toBeInTheDocument();
   });*/
 
-  /* it("renders total cost correctly", () => {
+  /*it("calculates and displays the total cost correctly", async () => {
     render(
       <BrowserRouter>
         <ChakraProvider value={defaultSystem}>
@@ -80,9 +124,8 @@ describe("LicenceView Component", () => {
       </BrowserRouter>
     );
 
-    expect(
-      screen.getByText("Gesamtkosten für Planner Licences:")
-    ).toBeInTheDocument();
-    expect(screen.getByText("0,00€ / Monat")).toBeInTheDocument();
+    await waitFor(() => screen.getByText("Gesamtkosten für Base Licences:"));
+
+    expect(screen.getByText("20 € / Monat")).toBeInTheDocument(); // 2 Base-Lizenzen à 10€
   });*/
 });

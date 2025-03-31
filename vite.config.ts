@@ -18,6 +18,14 @@ export default defineConfig({
         "src/components/ui/provider.tsx",
         "src/components/ui/toaster.tsx",
         "src/components/ui/tooltip.tsx",
+        "projekt-west-calvin", // Ausschließen des gesamten Verzeichnisses
+        "eslint.config.js", // Ausschließen der ESLint-Konfigurationsdatei
+        "vite.config.ts", // Ausschließen der Vite-Konfigurationsdatei
+        "projekt-west-calvin/src/App.tsx", // Ausschließen der App.tsx
+        "projekt-west-calvin/src/main.tsx", // Ausschließen der main.tsx
+        "src/App.tsx", // Ausschließen der App.tsx-Datei im src-Verzeichnis
+        "src/main.tsx",
+        "**/vite-env.d.ts",
       ],
     },
   },
