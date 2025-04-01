@@ -1,25 +1,9 @@
-const API_BASE_URL = "http://localhost:5000/api"; // Passe die URL an dein Backend an
+const API_BASE_URL = "http://localhost:5000/api/lizenzen";
 
-// Holt die Lizenzanzahlen für die Übersicht
+// Holt alle Lizenzen
 export async function fetchLicenseCounts() {
   try {
-    const response = await fetch(`${API_BASE_URL}/licenses/counts`);
-    if (!response.ok) {
-      throw new Error(
-        `Fehler beim Abrufen der Lizenzanzahlen: ${response.statusText}`
-      );
-    }
-    return await response.json();
-  } catch (error) {
-    console.error("Fehler beim Laden der Lizenzanzahlen:", error);
-    return { free: 0, base: 0, professional: 0 };
-  }
-}
-
-// Holt alle Lizenzen für eine bestimmte Lizenzart (free, base, professional)
-export async function fetchLicensesByType(type: string) {
-  try {
-    const response = await fetch(`${API_BASE_URL}/licenses?type=${type}`);
+    const response = await fetch(`${API_BASE_URL}`);
     if (!response.ok) {
       throw new Error(
         `Fehler beim Abrufen der Lizenzen: ${response.statusText}`
@@ -32,15 +16,31 @@ export async function fetchLicensesByType(type: string) {
   }
 }
 
-// Bucht neue Lizenzen anhand der übergebenen Anzahl und des Typs
+// Holt eine Lizenz nach Typ
+export async function fetchLicensesByType(type: string) {
+  try {
+    const response = await fetch(`${API_BASE_URL}?type=${type}`);
+    if (!response.ok) {
+      throw new Error(
+        `Fehler beim Abrufen der Lizenzen: ${response.statusText}`
+      );
+    }
+    return await response.json();
+  } catch (error) {
+    console.error("Fehler beim Laden der Lizenzen:", error);
+    return [];
+  }
+}
+
+// Bucht neue Lizenzen
 export async function bookLicenses(type: string, count: number) {
   try {
-    const response = await fetch(`${API_BASE_URL}/licenses/book`, {
+    const response = await fetch(`${API_BASE_URL}/book`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ type, count }),
+      body: JSON.stringify({ lizenztyp: type, anzahl: count }),
     });
 
     if (!response.ok) {
@@ -56,15 +56,15 @@ export async function bookLicenses(type: string, count: number) {
   }
 }
 
-// Kündigt eine oder mehrere Lizenzen anhand ihrer Key-IDs
-export async function terminateLicenses(keys: string[]) {
+// Kündigt Lizenzen
+export async function terminateLicenses(keys: number[]) {
   try {
-    const response = await fetch(`${API_BASE_URL}/licenses/terminate`, {
+    const response = await fetch(`${API_BASE_URL}/terminate`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ keys }),
+      body: JSON.stringify(keys),
     });
 
     if (!response.ok) {
